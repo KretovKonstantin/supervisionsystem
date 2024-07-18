@@ -1,0 +1,52 @@
+{% extends 'newsapp/base.html' %}
+
+{% block title %}Списки{% endblock %}
+
+{% block content %}
+    <div class="content__top">
+        <div class="content__top-right">
+            <input type="text" class="input" placeholder="Search">
+            <button class="content__button"><i class="fa-solid fa-magnifying-glass"></i> Filter</button>
+        </div>
+        <div class="content__top-left">
+            <button class="content__button--small content__button--small-active"><i class="fa-regular fa-calendar"></i></button>
+            <button class="content__button--small"><i class="fa-solid fa-table-cells-large"></i></button>
+            <button class="content__button--small"><i class="fa-solid fa-list"></i></button>
+        </div>
+    </div>
+    <div class="table">
+        <div class="table__top">
+            <div class="table-left">
+                <p>Num</p>
+                <h3>Company</h3>
+            </div>
+            <div class="table-right">
+                <h3>Manager</h3>
+                <h3>CEO</h3>
+            </div>
+        </div>
+        {% for bank in banks %}
+        <div class="table__item">
+            <div class="table__item-left">
+                <p class="table__item-left-num">{{ forloop.counter }}</p>
+                <h4 class="table__item-left-name">{{ bank.name }}</h4>
+            </div>
+            <div class="table__item-right">
+                {% if bank.manager %}
+                    <p>{{ bank.manager.user.last_name }} {{ bank.manager.user.first_name }}</p>
+                {% else %}
+                    <p>No Manager</p>
+                {% endif %}
+                <p>{{ bank.ceo }}</p>
+                <a href="{% url 'update_bank_manager' bank.id %}" class="button">Edit Manager</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% if user.is_superuser %}
+    <div class="content__bottom">
+        <a href="{% url 'add_manager' %}" class="content__button content__button--black">Добавить менеджера</a>
+        <a href="{% url 'create_bank' %}" class="content__button content__button--black">Создать банк</a>
+    </div>
+    {% endif %}
+{% endblock %}
